@@ -12,7 +12,9 @@ const PlayVideo = ({ navigation,uri }) => {
   const [isFullScreen, setIsFullScreen] = useState(false);
 
 
-
+console.log('====================================');
+console.log(uri,"videoooooo");
+console.log('====================================');
 
   const downloadVideo = async (videoUri, userId) => {
     try {
@@ -40,6 +42,7 @@ const PlayVideo = ({ navigation,uri }) => {
 
 
   useEffect(() => {
+    
     const subscription = ScreenOrientation.addOrientationChangeListener(handleOrientationChange);
     return () => {
       ScreenOrientation.removeOrientationChangeListener(subscription);

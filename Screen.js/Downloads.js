@@ -3,15 +3,22 @@ import { View, StyleSheet, Dimensions, Alert, Text, TouchableOpacity, FlatList }
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Feather'; // Import icons from Feather
 import PlayAudio from './playAudio';
+import Icons from 'react-native-vector-icons/MaterialCommunityIcons';
 import PlayVideo from './playVideo';
+import { Button } from 'react-native-paper';
+
 
 const { width } = Dimensions.get('window');
 
-const Downloads = () => {
+const Downloads = ({navigation}) => {
   const [videoList, setVideoList] = useState([]);
   const [audioList, setAudioList] = useState([]);
   const [playingUri, setPlayingUri] = useState(null);
   const [playbackType, setPlaybackType] = useState(null); // 'audio' or 'video'
+  console.log('====================================');
+  console.log(videoList,"xxxxxxxxxxxxxx");
+  console.log('====================================');
+
 
   useEffect(() => {
     const loadFiles = async () => {
@@ -27,6 +34,9 @@ const Downloads = () => {
                 return { key, uri };
               })
           );
+          console.log('====================================');
+          console.log(videoUris);
+          console.log('====================================');
           const audioUris = await Promise.all(
             allKeys
               .filter(key => key.startsWith(`audio_${crn}`))
@@ -35,7 +45,9 @@ const Downloads = () => {
                 return { key, uri };
               })
           );
-
+          console.log('====================================');
+          console.log(audioUris,"eeeeeeeeeeeee");
+          console.log('====================================');
           // Remove duplicates
           const uniqueVideos = Array.from(new Set(videoUris.map(v => v.uri)))
             .map(uri => videoUris.find(v => v.uri === uri));
@@ -87,17 +99,7 @@ const Downloads = () => {
     }
   };
 
-  const renderFileItem = ({ item, type }) => (
-    <View style={styles.fileContainer}>
-      <TouchableOpacity onPress={() => handlePlay(item.uri, type)} style={styles.playButton}>
-        <Icon name="play" size={24} color="#fff" />
-        <Text style={styles.playButtonText}>Play {type}</Text>
-      </TouchableOpacity>
-      <TouchableOpacity onPress={() => handleDelete(item.uri, type)} style={styles.deleteButton}>
-        <Icon name="trash-2" size={24} color="#fff" />
-      </TouchableOpacity>
-    </View>
-  );
+
 
   return (
     <View style={styles.container}>
@@ -106,28 +108,41 @@ const Downloads = () => {
       ) : (
         <>
           {videoList.length > 0 && (
-            <FlatList
-              data={videoList}
-              keyExtractor={(item) => item.uri}
-              renderItem={(props) => renderFileItem({ ...props, type: 'video' })}
-            />
+ <View style={styles.fileContainer}>
+ <TouchableOpacity onPress={() => handlePlay(videoList[0].uri, "video")} style={styles.playButton}>
+   <Icon name="play" size={24} color="#fff" />
+   <Text style={styles.playButtonText}>Play {"video"}</Text>
+ </TouchableOpacity>
+ <TouchableOpacity onPress={() => handleDelete(videoList[0].uri, "video")} style={styles.deleteButton}>
+   <Icon name="trash-2" size={24} color="#fff" />
+ </TouchableOpacity>
+</View>
           )}
           {audioList.length > 0 && (
-            <FlatList
-              data={audioList}
-              keyExtractor={(item) => item.uri}
-              renderItem={(props) => renderFileItem({ ...props, type: 'audio' })}
-            />
+ <View style={styles.fileContainer}>
+ <TouchableOpacity onPress={() => handlePlay(audioList[0].uri, "audio")} style={styles.playButton}>
+   <Icon name="play" size={24} color="#fff" />
+   <Text style={styles.playButtonText}>Play {"audio"}</Text>
+ </TouchableOpacity>
+ <TouchableOpacity onPress={() => handleDelete(audioList[0].uri, "audio")} style={styles.deleteButton}>
+   <Icon name="trash-2" size={24} color="#fff" />
+ </TouchableOpacity>
+</View>
           )}
         </>
       )}
       {playingUri && playbackType && (
         playbackType === 'video' ? (
-          <PlayVideo uri={playingUri} />
+          <View style={{flex:1,backgroundColor:"red",marginBottom:100}}>
+
+            <PlayVideo uri={playingUri} />
+          </View>
         ) : (
           <PlayAudio uri={playingUri} />
         )
       )}
+
+      <Icons style={{marginTop:35}} name="keyboard-backspace" size={30} onPress={()=>navigation.navigate("Home")}/>
     </View>
   );
 };
