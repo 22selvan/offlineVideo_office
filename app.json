@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "hrApp",
-    "slug": "hrApp",
+    "name": "LearnLMS",
+    "slug": "LearnLMS",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -29,10 +29,19 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": [
+        "android.permission.RECORD_AUDIO"
+      ],
+      "package": "com.learlms"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "88becf9a-6575-492d-bcf7-ad8f0dfa0594"
+      }
     }
   }
 }

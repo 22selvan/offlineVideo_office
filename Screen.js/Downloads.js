@@ -4,9 +4,12 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import Icon from 'react-native-vector-icons/Feather';
 
 const Downloads = ({ navigation }) => {
-  const [videoList, setVideoList] = useState([]);
-  const [audioList, setAudioList] = useState([]);
+  const [videoList, setVideoList] = useState({key:"",videoUri:""});
+  const [audioList, setAudioList] = useState({key:"",audioUri:""});
   const [loading, setLoading] = useState(true);
+  console.log('====================================');
+  console.log(videoList,audioList);
+  console.log('====================================');
 
   const loadFiles = async () => {
     try {
@@ -14,8 +17,8 @@ const Downloads = ({ navigation }) => {
       if (crn) {
         const videoUri = await AsyncStorage.getItem(`video_${crn}`);
         const audioUri = await AsyncStorage.getItem(`audio_${crn}`);
-        setVideoList(videoUri ? [videoUri] : []);
-        setAudioList(audioUri ? [audioUri] : []);
+        setVideoList([{key:crn,videoUri:videoUri}]);
+        setAudioList([{key:crn,audioUri:audioUri}]);
       } else {
         Alert.alert('No CRN found', 'CRN is missing.');
       }
@@ -32,10 +35,10 @@ const Downloads = ({ navigation }) => {
 
   const handlePlay = (type) => {
     const screen = type === "video" ? "playvideo" : "PlayAudio";
-    const dataList = type === "video" ? videoList : audioList;
+    const uri = type === "video" ? videoList : audioList;
 
-    if (dataList.length > 0) {
-      navigation.navigate(screen, { dataList });
+    if (uri.length > 0) {
+      navigation.navigate(screen, { uri });
     } else {
       Alert.alert(`${type.charAt(0).toUpperCase() + type.slice(1)} Not Available`);
     }
@@ -48,6 +51,7 @@ const Downloads = ({ navigation }) => {
         if (type === 'video') {
           setVideoList([]);
           await AsyncStorage.removeItem(`video_${crn}`);
+     
         } else if (type === 'audio') {
           setAudioList([]);
           await AsyncStorage.removeItem(`audio_${crn}`);
@@ -65,11 +69,12 @@ const Downloads = ({ navigation }) => {
         <ActivityIndicator size="large" color="#0000ff" />
       ) : (
         <>
-          {videoList.length === 0 && audioList.length === 0 ? (
+          {videoList.length === 0 && audioList.length === 0  ? videoList[0].videoUri === null &&
+           videoList[0].audioUri === null ?  <Text>No files available</Text> : (
             <Text>No files available</Text>
           ) : (
             <>
-              {videoList.length > 0 ? (
+              {videoList.length > 0 && videoList[0].videoUri !== null ? (
                 <View style={styles.fileContainer}>
                   <TouchableOpacity onPress={() => handlePlay("video")} style={styles.playButton}>
                     <Icon name="play" size={24} color="#fff" />
@@ -79,8 +84,8 @@ const Downloads = ({ navigation }) => {
                     <Icon name="trash-2" size={24} color="#fff" />
                   </TouchableOpacity>
                 </View>
-              ) : ""}
-              {audioList.length > 0 ? (
+              ) :  <Text>No Video files available</Text>}
+              {audioList.length > 0 && audioList[0].audioUri !== null ? (
                 <View style={styles.fileContainer}>
                   <TouchableOpacity onPress={() => handlePlay("audio")} style={styles.playButton}>
                     <Icon name="play" size={24} color="#fff" />
@@ -90,7 +95,7 @@ const Downloads = ({ navigation }) => {
                     <Icon name="trash-2" size={24} color="#fff" />
                   </TouchableOpacity>
                 </View>
-              ) : ""}
+              ) :  <Text>No Audio files available</Text>}
             </>
           )}
         </>

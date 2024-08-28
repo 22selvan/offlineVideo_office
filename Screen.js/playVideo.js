@@ -13,32 +13,10 @@ const PlayVideo = ({ navigation,route }) => {
 
   const { uri } = route.params;
 console.log('====================================');
-console.log(uri,"videoooooo");
+console.log(uri[0].videoUri,"videoooooo");
 console.log('====================================');
 
-  const downloadVideo = async (videoUri, userId) => {
-    try {
-      const crn = await AsyncStorage.getItem("CRN");
-      if (!crn) {
-        throw new Error('CRN not found in AsyncStorage');
-      }
-  
-      // Define a unique file path for the downloaded video
-      const fileUri = FileSystem.documentDirectory + `video_${crn}.mp4`;
-  
-      // Download the video and save it to the fileUri
-      const { uri } = await FileSystem.downloadAsync(videoUri, fileUri);
-  
-      // Store the file URI in AsyncStorage with the CRN key
-      await AsyncStorage.setItem(`video_${crn}`, uri);
-  
-      alert('Video downloaded successfully!');
-    } catch (error) {
-      console.error('Error downloading video:', error);
-      alert('Failed to download video');
-    }
-  };
-  
+
 
 
   useEffect(() => {
@@ -70,11 +48,7 @@ console.log('====================================');
     setIsFullScreen(!isFullScreen);
   };
 
-  const handleDownload = async () => {
 
-    await downloadVideo(uril);
-    //await downloadVideo(videoUri, userId);
-  };
 
   // Reset orientation to portrait when the screen is unfocused
   useFocusEffect(
@@ -89,7 +63,7 @@ console.log('====================================');
     <View style={isFullScreen ? styles.fullScreenContainer : styles.container}>
       <Video
         ref={videoRef}
-        source={{ uri: uri }}
+        source={{ uri: uri[0].videoUri }}
         style={styles.video}
         resizeMode="contain"
         shouldPlay

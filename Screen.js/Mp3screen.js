@@ -5,6 +5,8 @@ import { Audio } from 'expo-av';
 import Icon from 'react-native-vector-icons/MaterialIcons'; // Import Material Icons
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import * as FileSystem from 'expo-file-system';
+import { ActivityIndicator } from 'react-native';
+
 
 export default function MusicPlayer() {
   const [sound, setSound] = useState(null);
@@ -12,6 +14,8 @@ export default function MusicPlayer() {
   const [playbackPosition, setPlaybackPosition] = useState(0);
   const [playbackDuration, setPlaybackDuration] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  
 
   async function loadAudio() {
     const { sound, status } = await Audio.Sound.createAsync(
@@ -60,6 +64,7 @@ export default function MusicPlayer() {
   }, []);
 
   const downloadAudio = async (audioUri, userId) => {
+    setIsDownloading(true);
     try {
       // Retrieve a unique identifier from AsyncStorage or generate one
       const crn = await AsyncStorage.getItem("CRN");
@@ -71,8 +76,8 @@ export default function MusicPlayer() {
       const fileUri = FileSystem.documentDirectory + `audio_${crn}.mp3`;
   
       // Download the audio and save it to the fileUri
-      const { uri } = await FileSystem.downloadAsync(audioUri, fileUri);
-  
+      const { uri } = await FileSystem.downloadAsync(audioUri, fileUri)
+      setIsDownloading(false);
       // Store the file URI in AsyncStorage with the CRN key
       await AsyncStorage.setItem(`audio_${crn}`, uri);
   
@@ -83,7 +88,10 @@ export default function MusicPlayer() {
     }
   };
 
+
+
   const handleDownload = async () => {
+
     const audioUri = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' // Replace with your audio URL
     const userId = 'someUserId'; // Replace with actual user ID if needed
     await downloadAudio(audioUri, userId);
@@ -92,6 +100,13 @@ export default function MusicPlayer() {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Music Player</Text>
+      {isDownloading && (
+        <View style={styles.overlay}>
+          <Text style={styles.text}>Downloading...</Text>
+          {/* <Progress.Bar progress={downloadProgress} width={200} color="#ffffff" /> */}
+          <ActivityIndicator size="large" color="#ffffff" style={styles.indicator} />
+        </View>
+      )}
       <View style={styles.controls}>
         <Icon
           name={isPlaying ? 'pause' : 'play-arrow'}
@@ -164,5 +179,23 @@ const styles = StyleSheet.create({
   },
   sliderLabel: {
     fontSize: 16,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000000', // Ensure the overlay is black
+  },
+  text: {
+    color: '#ffffff',
+    marginBottom: 10,
+    fontSize: 16,
+  },
+  indicator: {
+    marginTop: 20,
   },
 });

@@ -191,10 +191,12 @@ export default function Example() {
     fetchData();
   }, []);
 
-  const handleLogOut = () => {
+  const handleLogOut =async () => {
     AsyncStorage.removeItem("userloggeduid");
-
+    const crn = await AsyncStorage.getItem("CRN");   
     AsyncStorage.removeItem("CRN");
+    await AsyncStorage.removeItem(`video_${crn}`);
+    await AsyncStorage.removeItem(`audio_${crn}`);
 
     userloggeduidHandler("1");
 

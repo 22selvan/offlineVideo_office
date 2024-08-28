@@ -14,13 +14,11 @@ export default function PlayAudio({route}) {
     const [isLoaded, setIsLoaded] = useState(false);
 
     const { uri } = route.params;
-    console.log('====================================');
-    console.log(uri,"loadded");
-    console.log('====================================');
+
     async function loadAudio() {
         try {
             const { sound, status } = await Audio.Sound.createAsync(
-                { uri},
+                { uri :uri[0].audioUri},
                 { shouldPlay: isPlaying },
                 onPlaybackStatusUpdate
             );

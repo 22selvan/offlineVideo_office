@@ -1,20 +1,25 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { View, TouchableOpacity, StyleSheet, Dimensions } from 'react-native';
+import { View, TouchableOpacity, StyleSheet, Dimensions,Text } from 'react-native';
 import { Video } from 'expo-av';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useFocusEffect } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { ActivityIndicator } from 'react-native';
 
 const VideoSceen = ({ navigation }) => {
   const videoRef = useRef(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const [uril, setUri] = useState('https://www.w3schools.com/html/mov_bbb.mp4');
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
+  
 
 
 
   const downloadVideo = async (videoUri, userId) => {
+    setIsDownloading(true);
     try {
       const crn = await AsyncStorage.getItem("CRN");
       if (!crn) {
@@ -30,7 +35,7 @@ const VideoSceen = ({ navigation }) => {
       // Store the file URI in AsyncStorage with the CRN key
       await AsyncStorage.setItem(`video_${crn}`, uri);
 
-   
+      setIsDownloading(false);
   
       alert('Video downloaded successfully!');
     } catch (error) {
@@ -86,6 +91,12 @@ const VideoSceen = ({ navigation }) => {
 
   return (
     <View style={isFullScreen ? styles.fullScreenContainer : styles.container}>
+            {isDownloading && (
+        <View style={styles.overlay}>
+          <Text style={styles.text}>Downloading...</Text>
+          <ActivityIndicator size="large" color="#ffffff" style={styles.indicator} />
+        </View>
+      )}
       <Video
         ref={videoRef}
         source={{ uri: uril }}
@@ -135,6 +146,24 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 10,
     left: 10,
+  },
+  overlay: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#000000', // Ensure the overlay is black
+  },
+  text: {
+    color: '#ffffff',
+    marginBottom: 10,
+    fontSize: 16,
+  },
+  indicator: {
+    marginTop: 20,
   },
 });
 
