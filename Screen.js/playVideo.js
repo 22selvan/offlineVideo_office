@@ -7,11 +7,11 @@ import { useFocusEffect } from '@react-navigation/native';
 import * as FileSystem from 'expo-file-system';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const PlayVideo = ({ navigation,uri }) => {
+const PlayVideo = ({ navigation,route }) => {
   const videoRef = useRef(null);
   const [isFullScreen, setIsFullScreen] = useState(false);
 
-
+  const { uri } = route.params;
 console.log('====================================');
 console.log(uri,"videoooooo");
 console.log('====================================');
@@ -42,7 +42,7 @@ console.log('====================================');
 
 
   useEffect(() => {
-    
+
     const subscription = ScreenOrientation.addOrientationChangeListener(handleOrientationChange);
     return () => {
       ScreenOrientation.removeOrientationChangeListener(subscription);

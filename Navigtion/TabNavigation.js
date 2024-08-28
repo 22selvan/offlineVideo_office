@@ -36,13 +36,13 @@ const MyTabs =()=> {
       })}
 
       >
-        <Tab.Screen name="downloaded" component={Downloads}  options={{ title:"Downloads",
+        {/* <Tab.Screen name="downloaded" component={Downloads}  options={{ title:"Downloads",
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="view-dashboard" size={size} color={color} />
           ),
           headerShown: true,
  
-        }}/>
+        }}/> */}
         
         <Tab.Screen name="Home" component={HomeScreenStack} options={{ headerShown: false }} />
         <Tab.Screen name="Profile" options={{

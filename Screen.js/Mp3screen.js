@@ -13,11 +13,6 @@ export default function MusicPlayer() {
   const [playbackDuration, setPlaybackDuration] = useState(0);
   const [isLoaded, setIsLoaded] = useState(false);
 
-
-  console.log('====================================');
-  console.log('eeeeeeeeeeeeeeeee');
-  console.log('====================================');
-
   async function loadAudio() {
     const { sound, status } = await Audio.Sound.createAsync(
       { uri: 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' },
@@ -80,11 +75,6 @@ export default function MusicPlayer() {
   
       // Store the file URI in AsyncStorage with the CRN key
       await AsyncStorage.setItem(`audio_${crn}`, uri);
-
-      const value = await AsyncStorage.getItem(`audio_${crn}`)
-      console.log('====================================');
-      console.log(value,"RRRRRRRRRR");
-      console.log('====================================');
   
       alert('Audio downloaded successfully!');
     } catch (error) {
@@ -94,7 +84,7 @@ export default function MusicPlayer() {
   };
 
   const handleDownload = async () => {
-    const audioUri = 'https://example.com/audiofile.mp3'; // Replace with your audio URL
+    const audioUri = 'https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3' // Replace with your audio URL
     const userId = 'someUserId'; // Replace with actual user ID if needed
     await downloadAudio(audioUri, userId);
   };

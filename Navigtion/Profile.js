@@ -31,6 +31,7 @@ import {
   TouchableOpacity,
   Switch,
   Image,
+  Button
 } from "react-native";
 
 import * as ImagePicker from "expo-image-picker";
@@ -228,7 +229,7 @@ export default function Example() {
   const DynamicComponent = () => {
     return (
       <View style={styles.section}>
-          
+          <Button title="Download" onPress={()=>navigation.navigate("downloade")} />
       </View>
     );
   };

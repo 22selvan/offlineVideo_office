@@ -10,6 +10,9 @@ import DiagnosisResult from "../Screen.js/DiagnosisResult";
 import VideoSceen from "../Screen.js/VideoSceen";
 import Mp3screen from "../Screen.js/Mp3screen";
 import Powerpoint from "../Screen.js/Powerpoint";
+import PlayAudio from "../Screen.js/playAudio";
+import PlayVideo from "../Screen.js/playVideo";
+import Downloads from "../Screen.js/Downloads";
 const image9 = require('../assets/images/boss.png');
 
 const stack = createStackNavigator();
@@ -53,6 +56,9 @@ const HomeScreenStack=()=>{
             <stack.Screen options={{ headerTitle: "Video Screen" }} name="videoscreen" component={VideoSceen} />
             <stack.Screen options={{ headerTitle: "Mp3 Screen" }}  name="mp3screen" component={Mp3screen} />
             <stack.Screen options={{ headerTitle: "Power Pointscreen" }}  name="powerpointscreen" component={Powerpoint} />
+            <stack.Screen options={{ headerTitle: "Play Audio" }}  name="PlayAudio" component={PlayAudio} />
+            <stack.Screen options={{ headerTitle: "Play Video" }}  name="playvideo" component={PlayVideo} />
+            <stack.Screen options={{ headerTitle: "Downloade" }}  name="downloade" component={Downloads} />
         </stack.Navigator>
     
     )
