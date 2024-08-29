@@ -4,7 +4,7 @@
     "slug": "LearnLMS",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/icon1.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
@@ -17,23 +17,34 @@
         {
           "photosPermission": "The app accesses your photos to let you share them with your friends."
         }
+      ],
+      [
+        "expo-build-properties",
+        {
+
+          "android": {
+            "buildToolVersion":"34.0.0",
+            "minSdkVersion": 23,
+            "compileSdkVersion": 34,
+            "targetSdkVersion": 34
+          }
+        }
       ]
     ],
     "assetBundlePatterns": [
       "**/*"
     ],
-    "ios": {
-      "supportsTablet": true
-    },
+   
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/adaptive-icon1.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
         "android.permission.RECORD_AUDIO"
       ],
-      "package": "com.learlms"
+      "package": "com.learlms",
+      "versionCode": 1
     },
     "web": {
       "favicon": "./assets/favicon.png"
